@@ -2,6 +2,7 @@ package com.foodApp.Food_Application.controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import com.foodApp.Food_Application.service.AdminService;
 import com.foodApp.Food_Application.util.ResponseStructure;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class AdminController {
 	@Autowired
 	AdminDao dao;
@@ -23,6 +25,8 @@ public class AdminController {
 	@Autowired
 	AdminService service;
 	@PostMapping("/admin")
+	
+
 	public ResponseEntity<ResponseStructure<Admin>> saveAdmin(@RequestBody Admin admin) {
 		return service.saveAdmin(admin);
 	}
@@ -43,4 +47,12 @@ public class AdminController {
 	public ResponseEntity<ResponseStructure<List<Admin>>>  findAllAdmin(){
 		return service.findAllAdmin();
 	}
+	
+	@PostMapping("/adminLogin")
+	public ResponseEntity<ResponseStructure<Admin>> login(@RequestBody Admin admin){
+		return service.findByEmailAndPasword(admin);
+	}
+	
+	
+	
 }

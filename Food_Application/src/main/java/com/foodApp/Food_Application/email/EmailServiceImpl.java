@@ -11,6 +11,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.foodApp.Food_Application.dto.FoodOrder;
+
 public class EmailServiceImpl {
 //	@Value("${spring.mail.host}")
 //	String host;
@@ -45,7 +47,7 @@ public class EmailServiceImpl {
 		
 		Session session=Session.getInstance(properties,new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("bamotriyasachin6@gmail.com","habtufjinvyuablo");
+				return new PasswordAuthentication("bamotriyasachin6@gmail.com","bamotriya9171726367");
 			}
 		});
 		
@@ -63,7 +65,16 @@ public class EmailServiceImpl {
 		System.out.println("Email Sent Successfully");
 		return null;
 	}
-
+	
+	public EmailDetails getEmailDetails(FoodOrder foodOrder) {
+		EmailDetails details =new EmailDetails();
+		details.setRecipient(foodOrder.getCustomerEmail());
+		details.setSubject("Welcome to Food App");
+		String Itemmsg=details.setEmail(foodOrder);
+		details.setMsgBody(Itemmsg);
+		return details;
+		
+	}
 	 
 
 }

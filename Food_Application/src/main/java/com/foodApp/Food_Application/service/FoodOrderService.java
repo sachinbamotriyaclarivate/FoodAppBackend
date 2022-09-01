@@ -47,10 +47,6 @@ public class FoodOrderService {
 			items.add(it);
 			countItem++;
 		}
-		
-		
-		
-		
 		foodOrder.setQuantity(countItem);
 		foodOrder.setTotalAmount(amount);
 		foodOrder.setItem(items);
@@ -61,19 +57,14 @@ public class FoodOrderService {
 		
 		
 		EmailServiceImpl emailServiceImpl = new EmailServiceImpl();
-		EmailDetails details =new EmailDetails();
-		details.setRecipient("sachinbamotriya91@gmail.com");
-		details.setSubject("Welcome to Food App");
-		String Itemmsg=details.setEmail(items, foodOrder);
-		//details.setItemsMsg(Itemmsg);
-		details.setMsgBody(Itemmsg);
-		try {
-			emailServiceImpl.sendSimpleMail(details);
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		EmailDetails details= emailServiceImpl.getEmailDetails(foodOrder);
 		
+//		try {
+//			emailServiceImpl.sendSimpleMail(details);
+//		} catch (MessagingException e) {
+//			throw new IdNotFoundException("");
+//		}
+//		
 		ResponseStructure<FoodOrder> structure = new ResponseStructure<>();
 		structure.setMessage("Food ordered has been saved Successfully");
 		structure.setStatus(HttpStatus.CREATED.value());
@@ -86,6 +77,7 @@ public class FoodOrderService {
 //	List<Items> item =findFoodOrderById(id).getItem();
 //	foodOrder.setId(id);
 //	foodOrder.setItem(item);
+	
 	public ResponseEntity<ResponseStructure<FoodOrder>> findFoodOrderById(int id) {
 		
 		
@@ -117,5 +109,37 @@ public class FoodOrderService {
 		structure.setStatus(HttpStatus.OK.value());
 		structure.setT(dao.deleteFoodOrder(id));
 		return new ResponseEntity<ResponseStructure<FoodOrder>>(structure, HttpStatus.OK);
+	}
+	
+	public ResponseEntity<ResponseStructure<FoodOrder>> updateFoodOrder(FoodOrder foodOrder,int item[],int orderId){
+		
+		FoodOrder fd= dao.updateFoodOrder(foodOrder,orderId);
+		
+		if(!fd.equals(null)) {
+			List<Items> items = new ArrayList<>();
+			int countItem=0;
+			int amount=0;
+			for(int itemId:item) {
+				Items it=itemsDao.findItemById(itemId).get();
+				amount+=Integer.parseInt(it.getPrice());
+				items.add(it);
+				countItem++;
+			}
+			fd.setQuantity(countItem);
+			fd.setItem(items);
+			fd.setTotalAmount(amount);
+			fd.setOrderCreatedTime(""+LocalTime.now());
+			
+			ResponseStructure<FoodOrder> structure = new ResponseStructure<>();
+			structure.setMessage("Food ordered has been Updated Successfully");
+			structure.setStatus(HttpStatus.OK.value());
+			structure.setT(dao.updateFoodOrder(fd,orderId));
+			return new ResponseEntity<ResponseStructure<FoodOrder>>(structure, HttpStatus.OK);
+		}
+		else {
+			throw new IdNotFoundException("Order");
+		}
+		
+		
 	}
 }

@@ -11,6 +11,7 @@ import com.foodApp.Food_Application.dao.BranchManagerDao;
 import com.foodApp.Food_Application.dao.StaffDao;
 import com.foodApp.Food_Application.dto.BranchManager;
 import com.foodApp.Food_Application.dto.Staff;
+import com.foodApp.Food_Application.exception.EmailFoundException;
 import com.foodApp.Food_Application.exception.IdNotFoundException;
 import com.foodApp.Food_Application.util.AES;
 import com.foodApp.Food_Application.util.ResponseStructure;
@@ -39,17 +40,19 @@ public class StaffService {
 		return new ResponseEntity<ResponseStructure<Staff>>(structure, HttpStatus.CREATED);
 	}
 
+	
 	public ResponseEntity<ResponseStructure<Staff>> findStaffById(int id) {
-		Optional<Staff> optional = dao.findStaffById(id);
-		if (optional.isEmpty()) {
+		Staff staff = dao.findStaffById(id).get();
+		if (staff==null) {
 			throw new IdNotFoundException("STaff is not found");
 		} else {
 			ResponseStructure<Staff> structure = new ResponseStructure<>();
 			structure.setMessage("Staff Found successfully");
 			structure.setStatus(HttpStatus.OK.value());
-			structure.setT(optional.get());
+			staff.setPassword(AES.decrypt(staff.getPassword(), "secret"));
+			structure.setT(staff);
 			return new ResponseEntity<ResponseStructure<Staff>>(structure, HttpStatus.OK);
-
+			
 		}
 	}
 	
@@ -57,12 +60,17 @@ public class StaffService {
 		ResponseStructure<List<Staff>> structure = new ResponseStructure<>();
 		structure.setMessage("All Staff Found successfully");
 		structure.setStatus(HttpStatus.OK.value());
+		
+		
 		structure.setT(dao.findAllStaff());
+		
+		
 		return new ResponseEntity<ResponseStructure<List<Staff>>>(structure, HttpStatus.OK);
 	}
 	
 	public ResponseEntity<ResponseStructure<Staff>> updateStaff(Staff staff, int id) {
 		
+		staff.setPassword(AES.encrypt(staff.getPassword(), "secret"));
 		Staff st = dao.updateStaff(staff, id);
 		ResponseStructure<Staff> structure = new ResponseStructure<>();
 
@@ -79,6 +87,7 @@ public class StaffService {
 		}
 }
 
+	
 	public ResponseEntity<ResponseStructure<Staff>> deleteStaff(int id) {
 		ResponseStructure<Staff> structure = new ResponseStructure<>();
 		structure.setMessage("Staff deleted successfully");
@@ -86,5 +95,23 @@ public class StaffService {
 		structure.setT(dao.deleteStaff(id));
 		return new ResponseEntity<ResponseStructure<Staff>>(structure, HttpStatus.OK);
 	}
+	
+	public ResponseEntity<ResponseStructure<Staff>> findByEmailAndPassword(Staff staff){
+		staff.setPassword(AES.encrypt(staff.getPassword(), "secret"));
+		Staff st = dao.findByEmailAndPassword(staff);
+		if(st!=null) {
+			st.setPassword(AES.decrypt(st.getPassword(), "secret"));
+			ResponseStructure<Staff> structure = new ResponseStructure<>();
+			structure.setMessage("Staff Found successfully");
+			structure.setStatus(HttpStatus.OK.value());			
+			structure.setT(st);
+			return new ResponseEntity<ResponseStructure<Staff>>(structure,HttpStatus.OK);
+		}
+		else {
+			throw new IdNotFoundException("Staff Not Found");
+		}
+	}
+	
+	
 
 }

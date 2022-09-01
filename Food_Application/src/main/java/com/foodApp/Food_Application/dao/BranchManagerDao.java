@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.foodApp.Food_Application.dto.Admin;
 import com.foodApp.Food_Application.dto.Branch;
 import com.foodApp.Food_Application.dto.BranchManager;
 import com.foodApp.Food_Application.repository.BranchManagerRepository;
@@ -44,5 +45,13 @@ public class BranchManagerDao {
 	public List<BranchManager> findAllBranchManager() {
 		return repository.findAll();
 	}
+	
+	public BranchManager findByEmailAndPassword(BranchManager branchManager){
+		String email =branchManager.getEmail();
+		String password = branchManager.getPassword();
+		return repository.findBranchManagerByEmailAndPassword(email,password);
+	}
+	
+
 
 }

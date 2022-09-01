@@ -29,7 +29,7 @@ public class ItemsService {
 		item.setMenu(menu);
 		
 		ResponseStructure<Items> structure = new ResponseStructure<>();
-		structure.setMessage("Branch Saved Successfully");
+		structure.setMessage("Items Saved Successfully");
 		structure.setStatus(HttpStatus.CREATED.value());
 		structure.setT(dao.saveItem(item));
 		return new ResponseEntity<ResponseStructure<Items>>(structure, HttpStatus.CREATED);

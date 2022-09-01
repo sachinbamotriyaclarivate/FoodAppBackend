@@ -51,8 +51,6 @@ public class BranchService {
 
 		}
 	}
-	
-	
 	public  ResponseEntity<ResponseStructure<Branch>> updateBranch(Branch branch, int id) {
 		
 		Branch brc = dao.updateBranch(branch, id);
@@ -69,7 +67,6 @@ public class BranchService {
 			structure.setStatus(HttpStatus.NOT_FOUND.value());
 			structure.setT(null);
 			return new ResponseEntity<ResponseStructure<Branch>>(structure, HttpStatus.NOT_FOUND);
-
 		}
 	}
 

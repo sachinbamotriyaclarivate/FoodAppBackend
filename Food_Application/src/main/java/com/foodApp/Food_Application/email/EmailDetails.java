@@ -53,7 +53,8 @@ public class EmailDetails {
 		this.itemsMsg = itemsMsg;
 	}
 
-	public String setEmail(List<Items> items, FoodOrder order) {
+	public String setEmail(FoodOrder order) {
+		List<Items> items =order.getItem();
 		String item = "Hello " + order.getCustomerName() + " ,\r\n"
 				+ "Thank you for placing an order on Food App. "
 				+ "We’re glad to inform you that we’ve received your order and will process it very soon.\r\n"
@@ -74,5 +75,4 @@ public class EmailDetails {
 
 		return item;
 	}
-	// premarkertemplate;
 }

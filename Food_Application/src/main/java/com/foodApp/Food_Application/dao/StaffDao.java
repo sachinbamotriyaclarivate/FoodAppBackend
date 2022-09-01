@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.foodApp.Food_Application.dto.Branch;
 import com.foodApp.Food_Application.dto.BranchManager;
 import com.foodApp.Food_Application.dto.Staff;
 import com.foodApp.Food_Application.repository.StaffRepository;
@@ -46,4 +44,13 @@ public class StaffDao {
 		repository.delete(staff.get());
 		return staff.get();
 	}
+	public Staff findByEmailAndPassword(Staff staff){
+		String email =staff.getEmail();
+		String password = staff.getPassword();
+		return repository.findStaffByEmailAndPassword(email,password);
+	}
+	
+
+
+	
 }

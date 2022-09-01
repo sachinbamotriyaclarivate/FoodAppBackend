@@ -6,14 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.foodApp.Food_Application.dto.FoodOrder;
+import com.foodApp.Food_Application.dto.Staff;
 import com.foodApp.Food_Application.repository.FoodOrderRepository;
 
 @Repository
 public class FoodOrderDao {
 	@Autowired
 	FoodOrderRepository repository;
-
-
 	public FoodOrder saveFoodOrder(FoodOrder foodOrder) {
 
 		return repository.save(foodOrder);
@@ -26,12 +25,15 @@ public class FoodOrderDao {
 		return repository.findAll();
 	}
 	
-	public FoodOrder updateFoodOrder(FoodOrder foodOrder, int id) {
+	public FoodOrder updateFoodOrder(FoodOrder foodOrder,int orderId) {
 
-		if (repository.findById(id).isEmpty()) {
+		if (repository.findById(orderId).isEmpty()) {
 			return null;
 		} 
 		else {
+			foodOrder.setId(orderId);
+			Staff staff= findFoodOrderById(orderId).get().getStaff();
+			foodOrder.setStaff(staff);
 			return repository.save(foodOrder);
 		}
 	}

@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.foodApp.Food_Application.dao.ItemsDao;
 import com.foodApp.Food_Application.dto.Items;
@@ -17,6 +19,8 @@ import com.foodApp.Food_Application.service.ItemsService;
 import com.foodApp.Food_Application.util.ResponseStructure;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class ItemController {
 	@Autowired
 	ItemsDao dao;
@@ -24,7 +28,7 @@ public class ItemController {
 	@Autowired
 	ItemsService itemsService;
 	
-	@PostMapping("/saveitem/{id}")
+	@PostMapping("/item/{id}")
 	public ResponseEntity<ResponseStructure<Items>> saveItem(@RequestBody Items item, @PathVariable int id) {
 		return itemsService.saveItems(item,id);
 	}

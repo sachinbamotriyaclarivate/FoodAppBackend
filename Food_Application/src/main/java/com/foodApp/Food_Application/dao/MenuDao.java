@@ -26,19 +26,18 @@ public class MenuDao {
 		return repository.findAll();
 	}
 
-	public Menu updateMenu(Menu menu, int id) {
+	public Menu updateMenu(Menu menu, int menuId) {
 
-		if (repository.findById(id).isEmpty()) {
+		if (repository.findById(menuId).isEmpty()) {
 			return null;
 		} 
 		else {
-			BranchManager branchManager = findMenuById(id).get().getBranchManager();
+			BranchManager branchManager = findMenuById(menuId).get().getBranchManager();
 			menu.setBranchManager(branchManager);
-			menu.setMenuId(id);
+			menu.setMenuId(menuId);
 			return repository.save(menu);
 		}
 	}
-
 	public Menu deleteMenu(int id) {
 		Optional<Menu> menu = findMenuById(id);
 		repository.delete(menu.get());

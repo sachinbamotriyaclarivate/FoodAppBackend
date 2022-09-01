@@ -54,8 +54,8 @@ public class MenuService {
 		return new ResponseEntity<ResponseStructure<List<Menu>>>(structure, HttpStatus.OK);
 	}
 	
-	public ResponseEntity<ResponseStructure<Menu>> updateMenu(Menu menu, int id) {
-		Menu mn = dao.updateMenu(menu,id);
+	public ResponseEntity<ResponseStructure<Menu>> updateMenu(Menu menu, int menuId) {
+		Menu mn = dao.updateMenu(menu,menuId);
 		ResponseStructure<Menu> structure = new ResponseStructure<>();
 
 		if (mn != null) {

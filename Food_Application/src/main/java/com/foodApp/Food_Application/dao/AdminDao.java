@@ -40,4 +40,12 @@ public class AdminDao {
 	public List<Admin> findAllAdmin() {
 		return repository.findAll();
 	}
+	
+	public Admin findByEmailAndPassword(Admin admin){
+		String email =admin.getEmail();
+		String password = admin.getPassword();
+		return repository.findAdminByEmailAndPassword(email,password);
+	}
+	
+
 }
